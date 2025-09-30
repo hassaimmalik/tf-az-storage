@@ -13,6 +13,11 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     environment: prod
+    # Make ARM_* available to all steps
+    env:
+      ARM_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+      ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
     steps:
       - uses: actions/checkout@v4
@@ -29,14 +34,18 @@ jobs:
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
       - name: Terraform Init
+        shell: pwsh
         run: terraform init
 
       - name: Terraform Validate
+        shell: pwsh
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        shell: pwsh
+        run: terraform plan -out tfplan
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
+        shell: pwsh
         run: terraform apply -auto-approve tfplan
