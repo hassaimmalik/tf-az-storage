@@ -13,3 +13,15 @@ variable "sa_prefix" {
   description = "Prefix for storage account name (must be lowercase, alphanumeric, <=24 chars with random suffix)"
   default     = "tfstor"
 }
+
+variable "subscription_id" {
+  type = string
+}
+
+variable "tenant_id" {
+  type = string
+}
+
+variable "client_id" {
+  type = string
+}
